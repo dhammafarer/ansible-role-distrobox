@@ -1,0 +1,5 @@
+FROM {{ image }}
+
+{% for package in custom_image_packages[image_os_family] %}
+RUN pacman -Sy --noconfirm {{ package }}
+{% endfor %}

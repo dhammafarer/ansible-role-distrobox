@@ -1,0 +1,17 @@
+---
+install_distrobox: false
+
+# Image
+image: "docker.io/library/archlinux:latest"
+image_os_family: archlinux
+
+# Build
+customize_image: true
+build_image_name: "distrobox-{{ image_os_family }}"
+
+# Box
+box_name: arch
+
+box_home: "/home/{{ ansible_user_id }}/box/{{ box_name }}"
+
+box_extra_args: ""

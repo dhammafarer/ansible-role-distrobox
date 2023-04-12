@@ -1,0 +1,22 @@
+---
+- name: Build custom image if required.
+  when: customize_image
+  block:
+    - name: Ensure build directory exists.
+      ansible.builtin.file:
+        path: "/tmp/distrobox-build-{{ lookup('pipe', 'date +%s') }}"
+        state: directory
+        mode: "0755"
+      register: build_dir
+
+    - name: Prepare containerfile.
+      ansible.builtin.template:
+        src: templates/{{ image_os_family }}/Containerfile.j2
+        dest: "{{ build_dir.path }}/Containerfile"
+        mode: "0644"
+
+    - name: Build image.
+      containers.podman.podman_image:
+        name: "{{ build_image_name }}"
+        state: build
+        path: "{{ build_dir.path }}"

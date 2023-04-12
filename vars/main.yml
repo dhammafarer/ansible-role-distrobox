@@ -1,0 +1,14 @@
+---
+# vars file for box
+
+custom_image_packages:
+  archlinux:
+    - sudo
+    - python
+
+box_image: >
+  {% if customize_image %}
+    localhost/distrobox-{{ image_os_family }}:latest
+  {% else %}
+    {{ image }}
+  {% endif %}

@@ -1,0 +1,22 @@
+---
+- name: Prepare
+  hosts: all
+
+  tasks:
+    - name: Enable crb.
+      become: true
+      ansible.builtin.command:
+        cmd: dnf config-manager --set-enabled crb
+      changed_when: true
+
+    - name: Enable epel.
+      become: true
+      ansible.builtin.dnf:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+        state: present
+
+    - name: Install distrobox.
+      become: true
+      ansible.builtin.dnf:
+        name: distrobox
+        state: present

@@ -1,0 +1,17 @@
+---
+- name: Pull base container image
+  containers.podman.podman_image:
+    name: "{{ image }}"
+    state: present
+  notify: Build custom image.
+
+- name: Check if the box image already exists
+  containers.podman.podman_image_info:
+    name: "{{ build_image_name }}"
+  register: current
+  changed_when: "current.images | length == 0"
+  when: customize_image
+  notify: Build custom image.
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

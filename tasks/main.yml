@@ -1,0 +1,10 @@
+---
+- name: Import tasks installing distrobox.
+  ansible.builtin.import_tasks: install/main.yml
+  when: install_distrobox
+
+- name: Import tasks preparing the image.
+  ansible.builtin.import_tasks: image.yml
+
+- name: Import tasks creating the box.
+  ansible.builtin.import_tasks: box.yml

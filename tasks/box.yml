@@ -1,0 +1,16 @@
+---
+- name: Ensure that container home directory exists.
+  ansible.builtin.file:
+    path: "{{ box_home }}"
+    state: directory
+    mode: "0755"
+
+- name: Create the container.
+  ansible.builtin.command:
+    cmd: >
+      distrobox create -i {{ box_image }}
+      -n {{ box_name }}
+      -H {{ box_home }}
+      {{ box_extra_args }}
+  register: dc
+  changed_when: "'already exists' not in dc.stdout"
