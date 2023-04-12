@@ -14,3 +14,20 @@
       {{ box_extra_args }}
   register: dc
   changed_when: "'already exists' not in dc.stdout"
+
+- name: Attempt to run the container.
+  block:
+    - name: Initialize the container.
+      ansible.builtin.command:
+        cmd: "distrobox enter {{ box_name }}"
+      changed_when: true
+      register: init
+  rescue:
+    - name: Remove the container.
+      ansible.builtin.command:
+        cmd: "distrobox rm --force {{ box_name }}"
+      changed_when: true
+
+    - name: Print a failure message.
+      ansible.builtin.fail:
+        msg: "{{ init }}"
