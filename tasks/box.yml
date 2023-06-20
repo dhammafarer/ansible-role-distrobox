@@ -15,7 +15,24 @@
   register: dc
   changed_when: "'already exists' not in dc.stdout"
 
+- name: Ensure systemd unit is generated and enabled.
+  when: box_systemd_generated or box_systemd_enabled
+  block:
+    - name: Ensure systemd unit is generated for {{ box_name }}.
+      containers.podman.podman_generate_systemd:
+        name: "{{ box_name }}"
+        dest: ~/.config/systemd/user/
+
+    - name: Ensure systemd service is enabled for {{ box_name }}.
+      when: box_systemd_enabled
+      ansible.builtin.systemd:
+        name: container-{{ box_name }}
+        daemon_reload: true
+        enabled: true
+        scope: user
+
 - name: Attempt to run the container.
+  when: box_initialize
   block:
     - name: Initialize the container.
       ansible.builtin.command:

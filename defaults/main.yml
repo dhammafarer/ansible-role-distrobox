@@ -15,3 +15,8 @@ box_name: arch
 box_home: "/home/{{ ansible_user_id }}/box/{{ box_name }}"
 
 box_extra_args: ""
+
+box_systemd_generated: false
+box_systemd_enabled: false
+
+box_initialize: false
